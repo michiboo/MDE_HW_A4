@@ -1,0 +1,20 @@
+cryptoExchange Finance{
+		SubSystem{
+			SubSystem Spot{
+		
+	}
+		}
+	Tokens{
+		Token BitCoin{
+		decimal 1
+		TokenNetwork EVM}
+	}
+	TokenNetworks{
+		TokenNetwork 'EVM'{
+			chainID 1
+			RPC "https://evm.org"}
+	}
+
+}
+
+

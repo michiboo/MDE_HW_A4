@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cryptoExchangePackage" nsURI="https://cryptoExchangePackage/1.0"
+    nsPrefix="cryptoExchangePackage">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="cryptoExchange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="checkUniqueToken"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="checkUniqueToken" value="self.Tokens->isUnique(self)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="IP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DomainName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SubSystem" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//SubSystem"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Tokens" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokenNetworks" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TokenNetwork"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Account">
+    <eOperations name="availableBalance" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA; &#x9;&#x9;&#x9; if(not self.TokensBalance->select(Token = fToken)->isEmpty()) then&#xA; &#x9;&#x9;&#x9;&#x9;self.TokensBalance->select(Token = fToken)->collect(balance)->sum().oclAsType(ecore::EFloat[1] )&#xA;&#x9;&#x9;&#x9; else&#xA;&#x9;&#x9;&#x9; &#x9;0&#xA;&#x9;&#x9;&#x9; endif"/>
+      </eAnnotations>
+      <eParameters name="fToken" lowerBound="1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" derived="true" iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="derivation" value="self.oclContainer().oclAsType(SubSystem).getNextAccId(self)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokensBalance" upperBound="-1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TokenBalance"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transferRequest" upperBound="-1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TransferRequest"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Order">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="checkHasAmountOrder"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="checkHasAmountOrder" value="if(not self.Amount->isEmpty()) then &#xA;&#x9;&#x9;&#x9;self.account.availableBalance(self.TokenPair.TokenA) >= self.Amount&#xA;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;true&#xA;&#x9;&#x9;endif"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" derived="true" iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="derivation" value="self.oclContainer().oclAsType(SubSystem).getNextOrderId(self)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Price" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Amount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leverage" eType="ecore:EEnum /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//LeverageType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="ecore:EEnum /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//OrderType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="account" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Account"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokenPair" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TokenPair"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OrderType">
+    <eLiterals name="buy"/>
+    <eLiterals name="sell" value="1"/>
+    <eLiterals name="leverageLong" value="2" literal="leverageLong"/>
+    <eLiterals name="leverageShort" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LeverageType">
+    <eLiterals name="_1x" literal="1x"/>
+    <eLiterals name="_2x" value="1"/>
+    <eLiterals name="_5x" value="2"/>
+    <eLiterals name="_10x" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SavingOrder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Amount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="MatureDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Interest" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="account" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Account"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Token" lowerBound="1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubSystem">
+    <eOperations name="getNextOrderId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.name.toString() + '_Order_' + (Orders->indexOf(o)).toString()"/>
+      </eAnnotations>
+      <eParameters name="o" lowerBound="1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Order"/>
+    </eOperations>
+    <eOperations name="getNextAccId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.name.toString().replaceAll('https://cryptoExchangePackage/1.0\'::','') +  '_Account_' + (accounts->indexOf(a)).toString()"/>
+      </eAnnotations>
+      <eParameters name="a" lowerBound="1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Account"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EEnum /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//SubSystemName"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accounts" upperBound="-1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Account"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokenPairs" upperBound="-1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TokenPair"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Orders" upperBound="-1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Order"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SavingOrders" upperBound="-1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//SavingOrder"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SubSystemName">
+    <eLiterals name="Spot"/>
+    <eLiterals name="Future" value="1"/>
+    <eLiterals name="Margin" value="2"/>
+    <eLiterals name="Saving" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Token">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="decimal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokenNetwork" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TokenNetwork"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TokenBalance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="balance" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Token" lowerBound="1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TokenNetwork">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="chainID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RPC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TokenPair">
+    <eOperations name="createName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA; &#x9;&#x9;&#x9; if(not self.TokenA->isEmpty() and not self.TokenB->isEmpty()) then&#xA; &#x9;&#x9;&#x9;&#x9;self.TokenA.name + ' / ' + self.TokenB.name&#xA;&#x9;&#x9;&#x9; else&#xA;&#x9;&#x9;&#x9; &#x9;''&#xA;&#x9;&#x9;&#x9; endif"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" derived="true" iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="derivation" value="self.createName()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokenA" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TokenB" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransferRequest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EEnum /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//TransferType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="amount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Token" lowerBound="1" eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Token"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Destination" lowerBound="1"
+        eType="ecore:EClass /cryptoExchangeEMF/model/cryptoExchangeModel.ecore#//Account"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransferType">
+    <eLiterals name="IntraExchange"/>
+    <eLiterals name="ExtraExchange" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

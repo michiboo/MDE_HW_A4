@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cryptoExchangePackage:cryptoExchange xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:cryptoExchangePackage="https://cryptoExchangePackage/1.0" IP="1.0.0.1" DomainName="ku.com">
+  <SubSystem>
+    <accounts name="'SubSystemName::Spot_Account_1">
+      <TokensBalance Token="Dogecoin"/>
+    </accounts>
+  </SubSystem>
+  <Tokens name="Dogecoin" address="0x00" decimal="1" TokenNetwork="EVM"/>
+  <TokenNetworks name="EVM" RPC="EVM.org"/>
+</cryptoExchangePackage:cryptoExchange>
